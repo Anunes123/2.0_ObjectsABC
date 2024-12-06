@@ -104,9 +104,12 @@ public void collisions(){
 			System.out.println("boom");
 			astro.dx = -astro.dx;
 			astro.dy = -astro.dy;
-			astro2.dx = -astro.dx;
-			astro2.dy = -astro.dy;
-
+			astro2.dx = -astro2.dx;
+			astro2.dy = -astro2.dy;
+			astro.dx = 1+astro.dx;
+			astro.dy = 1+astro.dy;
+			astro2.height = astro2.height*2;
+			astro2.width = astro2.width*2;
 
 
 		}
