@@ -13,14 +13,16 @@
 
 //Graphics Libraries
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
-
-public class BasicGameApp implements Runnable {
+// step 1 add Keylistener to the implements
+public class BasicGameApp implements Runnable, KeyListener {
 
 	//Variable Definition Section
 	//Declare the variables used in the program
@@ -48,7 +50,7 @@ public Image BackgroundPic;
 	// This is the code that runs first and automatically
 	public static void main(String[] args) {
 		BasicGameApp ex = new BasicGameApp();   //creates a new instance of the game
-		new Thread(ex).start();                 //creates a threads & starts up the code in the run( ) method  
+		new Thread(ex).start();                 //creates a threads & starts up the code in the run( ) method
 	}
 
 
@@ -62,11 +64,12 @@ public Image BackgroundPic;
 
 		//variable and objects
 		//create (construct) the objects needed for the game and load up
-		astroPic = Toolkit.getDefaultToolkit().getImage("astronaut.png"); //load the picture
-		astro2Pic= Toolkit.getDefaultToolkit().getImage("astro2.jpg");
-		BackgroundPic= Toolkit.getDefaultToolkit().getImage("stars.jpeg");
-		astro = new Astronaut(200, 20);
-		astro2 = new Astronaut(400, 20);
+
+		astroPic = Toolkit.getDefaultToolkit().getImage("brid.jpg"); //load the picture
+		astro2Pic= Toolkit.getDefaultToolkit().getImage("Bird22.jpg");
+		BackgroundPic= Toolkit.getDefaultToolkit().getImage("clouds-7050884_1280.jpg");
+		astro = new Astronaut(300, 20);
+		astro2 = new Astronaut(100, 20);
 
 	}// BasicGameApp()
 
@@ -97,22 +100,34 @@ public Image BackgroundPic;
 		astro.bounce();
 		astro2.move();
 		astro2.wrap();
+	//	if(astro2.xpos>500) {
+	//		astro2.isAlive = false;
+	//		System.out.println("oops");
+	//	}
 
 	}
+
 public void collisions(){
-		if(astro.rec.intersects(astro2.rec)){
+		if(astro.rec.intersects(astro2.rec)&& astro.iscrash== false && astro2.isAlive && astro.isAlive){
 			System.out.println("boom");
 			astro.dx = -astro.dx;
 			astro.dy = -astro.dy;
 			astro2.dx = -astro2.dx;
 			astro2.dy = -astro2.dy;
-			astro.dx = 1+astro.dx;
-			astro.dy = 1+astro.dy;
-			astro2.height = astro2.height*2;
-			astro2.width = astro2.width*2;
-
+			astro.dx = 2+astro.dx;
+			astro.dy = 2+astro.dy;
+			astro2.height = astro2.height+2;
+			astro2.width = astro2.width+2;
+			astro.iscrash = true;
+			astro2.isAlive = false;
 
 		}
+	if(!astro.rec.intersects(astro2.rec)){
+		astro.iscrash=false;
+
+
+
+	}
 
 }
 	//Pauses or sleeps the computer for the amount specified in milliseconds
@@ -139,6 +154,8 @@ public void collisions(){
 		canvas.setBounds(0, 0, WIDTH, HEIGHT);
 		canvas.setIgnoreRepaint(true);
 
+		//Step2:  add key listener to canvas as this
+		canvas.addKeyListener(this);
 		panel.add(canvas);  // adds the canvas to the panel.
 
 		// frame operations
@@ -164,13 +181,34 @@ public void collisions(){
 
 		//draw the image of the astronaut
 		g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
-		g.drawImage(astro2Pic, astro2.xpos, astro2.ypos, astro2.width, astro2.height, null);
-		g.dispose();
 
+
+if(astro2.isAlive == true) {
+	g.drawImage(astro2Pic, astro2.xpos, astro2.ypos, astro2.width, astro2.height, null);
+}
+		g.dispose();
 		bufferStrategy.show();
 
 
 	}
 
+	@Override
+	public void keyTyped(KeyEvent e) {//dont use
 
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		System.out.println("pressed");
+		System.out.println(e.getKeyChar());
+		System.out.println(e.getKeyCode());
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+
+	}
+
+// step3: add methods keyreleased, key pressed, and key typed
+	//homework idenitfy key codes for up down left right
 	}
