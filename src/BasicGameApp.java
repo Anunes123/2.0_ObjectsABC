@@ -39,9 +39,9 @@ public class BasicGameApp implements Runnable, KeyListener {
 
 	public BufferStrategy bufferStrategy;
 	public Image astroPic;
-public Image astro2Pic;
-public Image BackgroundPic;
-//Declare the objects used in the program
+	public Image astro2Pic;
+	public Image BackgroundPic;
+	//Declare the objects used in the program
 	//These are things that are made up of more than one variable type
 	private Astronaut astro;
 	private Astronaut astro2;
@@ -66,8 +66,8 @@ public Image BackgroundPic;
 		//create (construct) the objects needed for the game and load up
 
 		astroPic = Toolkit.getDefaultToolkit().getImage("brid.jpg"); //load the picture
-		astro2Pic= Toolkit.getDefaultToolkit().getImage("Bird22.jpg");
-		BackgroundPic= Toolkit.getDefaultToolkit().getImage("clouds-7050884_1280.jpg");
+		astro2Pic = Toolkit.getDefaultToolkit().getImage("Bird22.jpg");
+		BackgroundPic = Toolkit.getDefaultToolkit().getImage("clouds-7050884_1280.jpg");
 		astro = new Astronaut(300, 20);
 		astro2 = new Astronaut(100, 20);
 
@@ -96,40 +96,39 @@ public Image BackgroundPic;
 	public void moveThings() {
 		//calls the move( ) code in the objects
 		collisions();
-		astro.move();
 		astro.bounce();
 		astro2.move();
 		astro2.wrap();
-	//	if(astro2.xpos>500) {
-	//		astro2.isAlive = false;
-	//		System.out.println("oops");
-	//	}
+		//	if(astro2.xpos>500) {
+		//		astro2.isAlive = false;
+		//		System.out.println("oops");
+		//	}
 
 	}
 
-public void collisions(){
-		if(astro.rec.intersects(astro2.rec)&& astro.iscrash== false && astro2.isAlive && astro.isAlive){
+	public void collisions() {
+		if (astro.rec.intersects(astro2.rec) && astro.iscrash == false && astro2.isAlive && astro.isAlive) {
 			System.out.println("boom");
 			astro.dx = -astro.dx;
 			astro.dy = -astro.dy;
 			astro2.dx = -astro2.dx;
 			astro2.dy = -astro2.dy;
-			astro.dx = 2+astro.dx;
-			astro.dy = 2+astro.dy;
-			astro2.height = astro2.height+2;
-			astro2.width = astro2.width+2;
+			astro.dx = 2 + astro.dx;
+			astro.dy = 2 + astro.dy;
+			astro2.height = astro2.height + 2;
+			astro2.width = astro2.width + 2;
 			astro.iscrash = true;
 			astro2.isAlive = false;
 
 		}
-	if(!astro.rec.intersects(astro2.rec)){
-		astro.iscrash=false;
+		if (!astro.rec.intersects(astro2.rec)) {
+			astro.iscrash = false;
 
 
+		}
 
 	}
 
-}
 	//Pauses or sleeps the computer for the amount specified in milliseconds
 	public void pause(int time) {
 		//sleep
@@ -177,15 +176,15 @@ public void collisions(){
 	private void render() {
 		Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
 		g.clearRect(0, 0, WIDTH, HEIGHT);
-		g.drawImage(BackgroundPic,0,0,WIDTH,HEIGHT,  null);
+		g.drawImage(BackgroundPic, 0, 0, WIDTH, HEIGHT, null);
 
 		//draw the image of the astronaut
 		g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
 
 
-if(astro2.isAlive == true) {
-	g.drawImage(astro2Pic, astro2.xpos, astro2.ypos, astro2.width, astro2.height, null);
-}
+		if (astro2.isAlive == true) {
+			g.drawImage(astro2Pic, astro2.xpos, astro2.ypos, astro2.width, astro2.height, null);
+		}
 		g.dispose();
 		bufferStrategy.show();
 
@@ -202,8 +201,40 @@ if(astro2.isAlive == true) {
 		System.out.println("pressed");
 		System.out.println(e.getKeyChar());
 		System.out.println(e.getKeyCode());
-	}
 
+		if (e.getKeyCode() == 38) {
+			System.out.println("up");
+			astro.dy = -5;
+			astro.dx = 0;
+			astro.up = true;
+			astro.down = false;
+		}
+		if (e.getKeyCode() == 40) {
+			System.out.println("down");
+			astro.dy = 5;
+			astro.dx = 0;
+			astro.down = true;
+			astro.up = false;
+		}
+		if (e.getKeyCode() == 37) {
+			System.out.println("left");
+			astro.dx = -5;
+			astro.dy = 0;
+			astro.left = true;
+			astro.right = false;
+		}
+		if (e.getKeyCode() == 39) {
+			System.out.println("right");
+			astro.dx = 5;
+			astro.dy = 0;
+			astro.right = true;
+			astro.left = false;
+		}
+		if (e.getKeyCode() == 40 && e.getKeyCode() == 39) {
+			astro.dx = 5;
+			astro.dy = 5;
+		}
+	}
 	@Override
 	public void keyReleased(KeyEvent e) {
 
@@ -211,4 +242,11 @@ if(astro2.isAlive == true) {
 
 // step3: add methods keyreleased, key pressed, and key typed
 	//homework idenitfy key codes for up down left right
+	// up 38
+
+
 	}
+	// down 40
+	// left 37
+	// right 39
+
