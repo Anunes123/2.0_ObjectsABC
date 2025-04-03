@@ -232,19 +232,23 @@ public class BasicGameApp implements Runnable, KeyListener {
 		if (e.getKeyCode() == 38) {
 			System.out.println("up");
 			astro.up = false;
+			astro.dy=0;
 		}
 		if (e.getKeyCode() == 40) {
 			System.out.println("down");
 			astro.down = false;
+			astro.dy=0;
 
 		}
 		if (e.getKeyCode() == 37) {
 			System.out.println("left");
 			astro.left = false;
+			astro.dx=0;
 		}
 		if (e.getKeyCode() == 39) {
 			System.out.println("right");
 			astro.right = false;
+			astro.dx=0;
 		}
 		if (e.getKeyCode() == 40 && e.getKeyCode() == 39) {
 			astro.dx = 5;
