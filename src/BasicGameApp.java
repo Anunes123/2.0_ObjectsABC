@@ -46,6 +46,10 @@ public class BasicGameApp implements Runnable, KeyListener {
 	private Astronaut astro;
 	private Astronaut astro2;
 
+	//step 1: make astro array and say how big it is
+	Astronaut[] astronautsArray = new Astronaut[10];
+
+
 	// Main method definition
 	// This is the code that runs first and automatically
 	public static void main(String[] args) {
@@ -70,6 +74,12 @@ public class BasicGameApp implements Runnable, KeyListener {
 		BackgroundPic = Toolkit.getDefaultToolkit().getImage("clouds-7050884_1280.jpg");
 		astro = new Astronaut(300, 20);
 		astro2 = new Astronaut(100, 20);
+
+		//step 2 fill astro array
+		for(int x = 0; x< astronautsArray.length; x++){
+astronautsArray[x]= new Astronaut((int)(Math.random()*900), (int)(Math.random()*700));
+
+		}
 
 	}// BasicGameApp()
 
@@ -103,6 +113,8 @@ public class BasicGameApp implements Runnable, KeyListener {
 		//		astro2.isAlive = false;
 		//		System.out.println("oops");
 		//	}
+
+		for (int y = 0; y < astronautsArray.length; y++){astronautsArray[y].move();}
 
 	}
 
@@ -184,6 +196,10 @@ public class BasicGameApp implements Runnable, KeyListener {
 
 		if (astro2.isAlive == true) {
 			g.drawImage(astro2Pic, astro2.xpos, astro2.ypos, astro2.width, astro2.height, null);
+		}
+		for(int l = 0; l< astronautsArray.length; l++){
+			g.drawImage(astroPic, astronautsArray[l].xpos, astronautsArray[l].ypos, astronautsArray[l].width, astronautsArray[l].height, null);
+
 		}
 		g.dispose();
 		bufferStrategy.show();
