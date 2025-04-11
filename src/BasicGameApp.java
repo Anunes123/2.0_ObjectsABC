@@ -135,7 +135,11 @@ astronautsArray[x]= new Astronaut((int)(Math.random()*900), (int)(Math.random()*
 		}
 		if (!astro.rec.intersects(astro2.rec)) {
 			astro.iscrash = false;
-
+			for (int b = 0; b < astronautsArray.length; b++) {
+				if (astro.rec.intersects(astronautsArray[b].rec)) {
+					System.out.println("crashing");
+				}
+			}
 
 		}
 
