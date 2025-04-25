@@ -21,12 +21,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
-// step 1 add Keylistener to the implements
+// adds the Keylistener to the implements
 public class BasicGameApp implements Runnable, KeyListener {
 
-	//Variable Definition Section
-	//Declare the variables used in the program
-	//You can set their initial values too
 
 	//Sets the width and height of the program window
 	final int WIDTH = 1000;
@@ -38,16 +35,18 @@ public class BasicGameApp implements Runnable, KeyListener {
 	public JPanel panel;
 
 	public BufferStrategy bufferStrategy;
-	public Image astroPic;
-	public Image astro2Pic;
+	public Image bird1Pic;
+	public Image bird2Pic;
+	public Image bird3Pic;
 	public Image BackgroundPic;
-	//Declare the objects used in the program
-	//These are things that are made up of more than one variable type
-	private Astronaut astro;
-	private Astronaut astro2;
 
-	//step 1: make astro array and say how big it is
-	Astronaut[] astronautsArray = new Astronaut[10];
+	//Declare the birds that are used
+	private Bird bird1;
+	private Bird bird2;
+	private Bird bird3;
+	// makes birds array and says how big the array is
+	Bird[] birdsArray = new Bird[10];
+	Bird [] birdsArray2 = new Bird[10];
 
 
 	// Main method definition
@@ -59,9 +58,6 @@ public class BasicGameApp implements Runnable, KeyListener {
 
 
 	// Constructor Method
-	// This has the same name as the class
-	// This section is the setup portion of the program
-	// Initialize your variables and construct your program objects here.
 	public BasicGameApp() {
 
 		setUpGraphics();
@@ -69,18 +65,24 @@ public class BasicGameApp implements Runnable, KeyListener {
 		//variable and objects
 		//create (construct) the objects needed for the game and load up
 
-		astroPic = Toolkit.getDefaultToolkit().getImage("brid.jpg"); //load the picture
-		astro2Pic = Toolkit.getDefaultToolkit().getImage("Bird22.jpg");
+		bird1Pic = Toolkit.getDefaultToolkit().getImage("brid.jpg"); //load the picture
+		bird2Pic = Toolkit.getDefaultToolkit().getImage("Bird22.jpg");
+		bird3Pic = Toolkit.getDefaultToolkit().getImage("robotbird.jpg");
 		BackgroundPic = Toolkit.getDefaultToolkit().getImage("clouds-7050884_1280.jpg");
-		astro = new Astronaut(300, 20);
-		astro2 = new Astronaut(100, 20);
+		bird1 = new Bird(300, 20);
+		bird2 = new Bird(500, 600);
+		bird3 = new Bird(100,200);
 
-		//step 2 fill astro array
-		for(int x = 0; x< astronautsArray.length; x++){
-astronautsArray[x]= new Astronaut((int)(Math.random()*900), (int)(Math.random()*700));
+		bird2.dx = 0;
+		bird2.dy = 0;
+
+		//creates the bird array and gives the birds the locations to be placed in
+		for(int x = 0; x< birdsArray.length; x++){
+birdsArray[x]= new Bird((int)(Math.random()*900), (int)(Math.random()*400));
 
 		}
-
+for (int x = 0; x< birdsArray2.length; x++)
+{birdsArray2[x]=  new Bird((int)(Math.random()*900), (int)(Math.random()*300));}
 	}// BasicGameApp()
 
 
@@ -104,40 +106,42 @@ astronautsArray[x]= new Astronaut((int)(Math.random()*900), (int)(Math.random()*
 
 
 	public void moveThings() {
-		//calls the move( ) code in the objects
+		//calls the moves we want for each of the birds
 		collisions();
-		astro.bounce();
-		astro2.move();
-		astro2.wrap();
-		//	if(astro2.xpos>500) {
-		//		astro2.isAlive = false;
+		bird1.bounce();
+		bird2.bounce();
+		bird3.move();
+		bird3.wrap();
+		//	if(bird2.xpos>500) {
+		//		bird2.isAlive = false;
 		//		System.out.println("oops");
 		//	}
 
-		for (int y = 0; y < astronautsArray.length; y++){astronautsArray[y].move();}
-
+		for (int y = 0; y < birdsArray.length; y++){birdsArray[y].bounce();}
+		for (int y = 0; y < birdsArray2.length; y++){birdsArray2[y].wrap();}
 	}
-
+// changes directions of birds when they hit
 	public void collisions() {
-		if (astro.rec.intersects(astro2.rec) && astro.iscrash == false && astro2.isAlive && astro.isAlive) {
+		if (bird1.rec.intersects(bird2.rec) && bird1.iscrash == false && bird2.isAlive && bird1.isAlive) {
 			System.out.println("boom");
-			astro.dx = -astro.dx;
-			astro.dy = -astro.dy;
-			astro2.dx = -astro2.dx;
-			astro2.dy = -astro2.dy;
-			astro.dx = 2 + astro.dx;
-			astro.dy = 2 + astro.dy;
-			astro2.height = astro2.height + 2;
-			astro2.width = astro2.width + 2;
-			astro.iscrash = true;
-			astro2.isAlive = false;
+			bird1.dx = -bird1.dx;
+			bird1.dy = -bird1.dy;
+			bird2.dx = -bird2.dx;
+			bird2.dy = -bird2.dy;
+			bird1.dx = 2 + bird1.dx;
+			bird1.dy = 2 + bird1.dy;
+			bird2.height = bird2.height + 2;
+			bird2.width = bird2.width + 2;
+			bird1.iscrash = true;
+			bird2.isAlive = false;
 
 		}
-		if (!astro.rec.intersects(astro2.rec)) {
-			astro.iscrash = false;
-			for (int b = 0; b < astronautsArray.length; b++) {
-				if (astro.rec.intersects(astronautsArray[b].rec)) {
-					System.out.println("crashing");
+		if (!bird1.rec.intersects(bird2.rec)) {
+			bird1.iscrash = false;
+			for (int b = 0; b < birdsArray.length; b++) {
+				if (bird2.rec.intersects(birdsArray[b].rec)) {
+					//System.out.println("crashing");
+					bird2.isAlive=false;
 				}
 			}
 
@@ -194,15 +198,26 @@ astronautsArray[x]= new Astronaut((int)(Math.random()*900), (int)(Math.random()*
 		g.clearRect(0, 0, WIDTH, HEIGHT);
 		g.drawImage(BackgroundPic, 0, 0, WIDTH, HEIGHT, null);
 
-		//draw the image of the astronaut
-		g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
+		//draw the image of bird1
+		g.drawImage(bird1Pic, bird1.xpos, bird1.ypos, bird1.width, bird1.height, null);
 
-
-		if (astro2.isAlive == true) {
-			g.drawImage(astro2Pic, astro2.xpos, astro2.ypos, astro2.width, astro2.height, null);
+//draw the image of bird2
+		if (bird2.isAlive == true) {
+			g.drawImage(bird2Pic, bird2.xpos, bird2.ypos, bird2.width, bird2.height, null);
 		}
-		for(int l = 0; l< astronautsArray.length; l++){
-			g.drawImage(astroPic, astronautsArray[l].xpos, astronautsArray[l].ypos, astronautsArray[l].width, astronautsArray[l].height, null);
+//draw the image of bird3
+if (bird3.isAlive == true) {
+	g.drawImage(bird3Pic, bird3.xpos, bird3.ypos, bird3.width, bird3.height, null);
+}
+
+
+		for(int l = 0; l< birdsArray.length; l++){
+			g.drawImage(bird1Pic, birdsArray[l].xpos, birdsArray[l].ypos, birdsArray[l].width, birdsArray[l].height, null);
+
+		}
+
+		for(int l = 0; l< birdsArray2.length; l++){
+			g.drawImage(bird3Pic, birdsArray2[l].xpos, birdsArray2[l].ypos, birdsArray2[l].width, birdsArray2[l].height, null);
 
 		}
 		g.dispose();
@@ -215,64 +230,69 @@ astronautsArray[x]= new Astronaut((int)(Math.random()*900), (int)(Math.random()*
 	public void keyTyped(KeyEvent e) {//dont use
 
 	}
-
+// code that recognizes if key is pressed
 	@Override
 	public void keyPressed(KeyEvent e) {
 		System.out.println("pressed");
 		System.out.println(e.getKeyChar());
 		System.out.println(e.getKeyCode());
 
+		// if key 38 (up arrow) is pressed then up is made true and down is made false
 		if (e.getKeyCode() == 38) {
 			System.out.println("up");
-			astro.up = true;
-			astro.down = false;
+			bird2.up = true;
+			bird2.down = false;
 		}
+		// if key 40 (down arrow) is pressed then down is made true and up is made false
 		if (e.getKeyCode() == 40) {
 			System.out.println("down");
-			astro.down = true;
-			astro.up = false;
+			bird2.down = true;
+			bird2.up = false;
 		}
+		// if key 37 (left arrow) is pressed then left is made true and right is made false
 		if (e.getKeyCode() == 37) {
 			System.out.println("left");
-			astro.left = true;
-			astro.right = false;
+			bird2.left = true;
+			bird2.right = false;
 		}
+		// if key 39 (right arrow) is pressed then right is made true and left is made false
 		if (e.getKeyCode() == 39) {
 			System.out.println("right");
-			astro.right = true;
-			astro.left = false;
+			bird2.right = true;
+			bird2.left = false;
 		}
 		if (e.getKeyCode() == 40 && e.getKeyCode() == 39) {
-			astro.dx = 5;
-			astro.dy = 5;
+			bird2.dx = 5;
+			bird2.dy = 5;
 		}
 	}
 	@Override
+	//detects when key is released to make it so that the bird stops when a key is released so the bird
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == 38) {
 			System.out.println("up");
-			astro.up = false;
-			astro.dy=0;
+			bird2.up = false;
+			bird2.dy=0;
 		}
 		if (e.getKeyCode() == 40) {
 			System.out.println("down");
-			astro.down = false;
-			astro.dy=0;
+			bird2.down = false;
+			bird2.dy=0;
 
 		}
 		if (e.getKeyCode() == 37) {
 			System.out.println("left");
-			astro.left = false;
-			astro.dx=0;
+			bird2.left = false;
+			bird2.dx=0;
 		}
 		if (e.getKeyCode() == 39) {
 			System.out.println("right");
-			astro.right = false;
-			astro.dx=0;
+			bird2.right = false;
+			bird2.dx=0;
 		}
 		if (e.getKeyCode() == 40 && e.getKeyCode() == 39) {
-			astro.dx = 5;
-			astro.dy = 5;
+			bird2.dx = 5;
+			bird2.dy = 5;
 		}
 	}
 
