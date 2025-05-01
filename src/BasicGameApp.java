@@ -39,6 +39,8 @@ public class BasicGameApp implements Runnable, KeyListener {
 	public Image bird2Pic;
 	public Image bird3Pic;
 	public Image BackgroundPic;
+	public Image WinPic;
+	public Image LosePic;
 
 	//Declare the birds that are used
 	private Bird bird1;
@@ -69,6 +71,8 @@ public class BasicGameApp implements Runnable, KeyListener {
 		bird2Pic = Toolkit.getDefaultToolkit().getImage("Bird22.jpg");
 		bird3Pic = Toolkit.getDefaultToolkit().getImage("robotbird.jpg");
 		BackgroundPic = Toolkit.getDefaultToolkit().getImage("clouds-7050884_1280.jpg");
+		WinPic = Toolkit.getDefaultToolkit().getImage("Win.jpg");
+		LosePic = Toolkit.getDefaultToolkit().getImage("over.jpg");
 		bird1 = new Bird(300, 20);
 		bird2 = new Bird(500, 600);
 		bird3 = new Bird(100,200);
@@ -120,8 +124,24 @@ for (int x = 0; x< birdsArray2.length; x++)
 		for (int y = 0; y < birdsArray.length; y++){birdsArray[y].bounce();}
 		for (int y = 0; y < birdsArray2.length; y++){birdsArray2[y].wrap();}
 	}
-// changes directions of birds when they hit
+// changes directions of birds when they hit+makes it so that if bird2 hits any of the birds in the array, bird 2 will die
 	public void collisions() {
+
+
+		//makes it so that if bird2 hits any of the birds in birds.array then it will set .isalive to false
+		for (int i = 0; i < birdsArray.length; i++) {
+			if (bird2.rec.intersects(birdsArray[i].rec) && bird2.isAlive && birdsArray[i].isAlive) {
+				bird2.isAlive = false; // Bird2 dies
+
+			}
+		}
+		// Check if bird2 collides with any bird in birdsArray2 (bird3 array) if it does, then bird2.isalive will be set to false
+		for (int i = 0; i < birdsArray2.length; i++) {
+			if (bird2.rec.intersects(birdsArray2[i].rec) && bird2.isAlive && birdsArray2[i].isAlive) {
+				bird2.isAlive = false; // Bird2 dies
+
+			}
+		}
 		if (bird1.rec.intersects(bird2.rec) && bird1.iscrash == false && bird2.isAlive && bird1.isAlive) {
 			System.out.println("boom");
 			bird1.dx = -bird1.dx;
@@ -134,16 +154,6 @@ for (int x = 0; x< birdsArray2.length; x++)
 			bird2.width = bird2.width + 2;
 			bird1.iscrash = true;
 			bird2.isAlive = false;
-
-		}
-		if (!bird1.rec.intersects(bird2.rec)) {
-			bird1.iscrash = false;
-			for (int b = 0; b < birdsArray.length; b++) {
-				if (bird2.rec.intersects(birdsArray[b].rec)) {
-					//System.out.println("crashing");
-					bird2.isAlive=false;
-				}
-			}
 
 		}
 
@@ -194,8 +204,10 @@ for (int x = 0; x< birdsArray2.length; x++)
 
 	//paints things on the screen using bufferStrategy
 	private void render() {
-		Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
+			Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
 		g.clearRect(0, 0, WIDTH, HEIGHT);
+
+		// draws the background
 		g.drawImage(BackgroundPic, 0, 0, WIDTH, HEIGHT, null);
 
 		//draw the image of bird1
@@ -208,6 +220,8 @@ for (int x = 0; x< birdsArray2.length; x++)
 //draw the image of bird3
 if (bird3.isAlive == true) {
 	g.drawImage(bird3Pic, bird3.xpos, bird3.ypos, bird3.width, bird3.height, null);
+
+
 }
 
 
@@ -219,6 +233,15 @@ if (bird3.isAlive == true) {
 		for(int l = 0; l< birdsArray2.length; l++){
 			g.drawImage(bird3Pic, birdsArray2[l].xpos, birdsArray2[l].ypos, birdsArray2[l].width, birdsArray2[l].height, null);
 
+		}
+		if(bird2.isAlive==false){
+			g.drawImage(LosePic, 0, 0, WIDTH, HEIGHT, null);
+
+
+		}
+
+		if(bird2.ypos<10){
+			g.drawImage(WinPic, 0, 0, WIDTH, HEIGHT, null);
 		}
 		g.dispose();
 		bufferStrategy.show();
@@ -269,6 +292,8 @@ if (bird3.isAlive == true) {
 	@Override
 	//detects when key is released to make it so that the bird stops when a key is released so the bird
 	public void keyReleased(KeyEvent e) {
+
+		// detects when a certain key is pressed and moves bird2 acordingly
 		if (e.getKeyCode() == 38) {
 			System.out.println("up");
 			bird2.up = false;
